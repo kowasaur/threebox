@@ -4,16 +4,36 @@
  */
 import { _validate, types } from "../utils/utils.js";
 import Object from './objects.js';
-import OBJLoader from "./loaders/OBJLoader.js";
-import MTLLoader from "./loaders/MTLLoader.js";
-import FBXLoader from "./loaders/FBXLoader.js";
-import GLTFLoader from "./loaders/GLTFLoader.js";
-import ColladaLoader from "./loaders/ColladaLoader.js";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { ColladaLoader } from "three/examples/jsm/loaders/ColladaLoader.js";
 const objLoader = new OBJLoader();
 const materialLoader = new MTLLoader();
 const gltfLoader = new GLTFLoader();
 const fbxLoader = new FBXLoader();
 const daeLoader = new ColladaLoader();
+
+function applyCredentials(loader, flag) {
+	if (!loader) return;
+	const withCredentials = !!flag;
+	if (typeof loader.setWithCredentials === 'function') {
+		loader.setWithCredentials(withCredentials);
+	}
+	if (typeof loader.setCrossOrigin === 'function') {
+		loader.setCrossOrigin(withCredentials ? 'use-credentials' : 'anonymous');
+	}
+	else if ('crossOrigin' in loader) {
+		loader.crossOrigin = withCredentials ? 'use-credentials' : 'anonymous';
+	}
+	else {
+		loader.withCredentials = withCredentials;
+	}
+	if (loader.manager && typeof loader.manager.setCrossOrigin === 'function') {
+		loader.manager.setCrossOrigin(withCredentials ? 'use-credentials' : 'anonymous');
+	}
+}
 
 function loadObj(options, cb, promise) {
 
@@ -41,10 +61,15 @@ function loadObj(options, cb, promise) {
 			break;
 	}
 
-	materialLoader.withCredentials = options.withCredentials;
-	materialLoader.load(options.mtl, loadObject, () => (null), error => {
-		console.warn("No material file found " + error.stack);
-	});
+	if (options.type === "mtl" && options.mtl) {
+		applyCredentials(materialLoader, options.withCredentials);
+		materialLoader.load(options.mtl, loadObject, () => (null), error => {
+			console.warn("No material file found " + error.stack);
+			loadObject();
+		});
+	} else {
+		loadObject();
+	}
 
 	function loadObject(materials) {
 
@@ -53,7 +78,7 @@ function loadObj(options, cb, promise) {
 			loader.setMaterials(materials);
 		}
 
-		loader.withCredentials = options.withCredentials;
+		applyCredentials(loader, options.withCredentials);
 		loader.load(options.obj, obj => {
 
 			//[jscastro] MTL/GLTF/FBX models have a different structure
