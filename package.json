@@ -30,6 +30,6 @@
   ],
   "dependencies": {
     "fflate": "^0.8.2",
-    "three": "^0.173.0"
+    "three": "^0.182.0"
   }
 }
