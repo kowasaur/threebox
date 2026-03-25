@@ -1102,7 +1102,6 @@ class Threebox {
 					this.world.children = [];
 					this.world = null;
 					this.objectsCache.clear();
-					console.log(this.memory());
 					return resolve;
 				})
 			);
