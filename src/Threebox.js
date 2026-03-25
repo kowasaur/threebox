@@ -1094,15 +1094,15 @@ class Threebox {
 		return new Promise((resolve) => {
 			resolve(
 				this.clear(null, true).then((resolve) => {
+					this.labelRenderer.dispose();
+					this.renderer.dispose();
 					this.map.remove();
 					this.map = {};
 					this.scene.remove(this.world);
 					this.world.children = [];
 					this.world = null;
 					this.objectsCache.clear();
-					this.labelRenderer.dispose();
 					console.log(this.memory());
-					this.renderer.dispose();
 					return resolve;
 				})
 			);
