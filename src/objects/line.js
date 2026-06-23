@@ -22,11 +22,11 @@ import { _validate, lnglatsToWorld, normalizeVertices, flattenVectors } from "..
 import Object from './objects.js';
 
 import { LineSegmentsGeometry as _LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
-import { Line2 as _line2 } from "three/examples/jsm/Addons.js";
+import { Line2 as _Line2 } from 'three/addons/lines/Line2.js';
 import { LineMaterial as _LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineSegments2 as _LineSegments2 } from "three/examples/jsm/lines/webgpu/LineSegments2.js";
 import { LineGeometry as _LineGeometry } from 'three/addons/lines/LineGeometry.js';
-import { Wireframe as _Wireframe } from "three/examples/jsm/Addons.js";
+import { Wireframe as _Wireframe } from 'three/addons/lines/Wireframe.js';
 import { WireframeGeometry2 as _WireframeGeometry2 } from 'three/addons/lines/WireframeGeometry2.js';
 
 function line(obj){
